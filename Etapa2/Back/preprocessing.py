@@ -1,4 +1,5 @@
 import unicodedata
+from joblib import load
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 import re
@@ -12,12 +13,6 @@ from nltk.stem import SnowballStemmer, WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-#class preprocessing (BaseEstimator, TransformerMixin):
-    #def __init__(self):
-    #    pass
-    
-    #def fit(self, X, y=None):
-    #    return self
   
 def remove_non_ascii(text):
     """Remove non-ASCII characters from list of tokenized words"""
@@ -35,9 +30,6 @@ def to_lowercase(text):
     return new_words
 
 def remove_punctuation(text):
-        #cleaned_text = ftfy.fix_text(text)
-        #cleaned_text = re.sub(r'[^\w\s]', '', cleaned_text)
-        #return cleaned_text
     """Remove punctuation from list of tokenized words"""
     new_words = []
     for word in text:
@@ -52,10 +44,6 @@ def remove_stopwords(text):
     return new_words
 
 def preprocessingTransformation(words):
-        #X['Review'] = X['Review'].apply(ftfy.fix_text)
-        #X['Review'] = X['Review'].apply(lambda x: x.lower())
-        #X['Review'] = X['Review'].apply(self.remove_punctuation)
-        #X["Review"] = X["Review"].astype(str)
     preprocessed_sentences = []
     for X in words:  # Flatten the list of lists
         X = to_lowercase(X)
@@ -66,7 +54,6 @@ def preprocessingTransformation(words):
     return preprocessed_sentences
 
 preprocessing_trans = FunctionTransformer(preprocessingTransformation)
-#return X["Review"]
 
 def tokenize_words(X):
     return [word_tokenize(x) for x in X]
@@ -86,9 +73,17 @@ def juntar(sentences):
 
 join_trans = FunctionTransformer(juntar)
 
-dataframeExample = pd.DataFrame({'Review': ['Hola, como estas? Estoy bien, gracias.', 'Seugnda fila con texto'], 'Class': [1,2]})
-tokenizado = tokenization_trans.transform(dataframeExample['Review'])
-preprocesado = preprocessing_trans.transform(tokenizado)
-lematizado = stem_and_lemm_trans.transform(preprocesado)
-junto = join_trans.transform(lematizado)
-tfidf_vectorizer = TfidfVectorizer()
+#dataframeExample = pd.DataFrame({'Review': ['Hola, como estas? Estoy bien, gracias.', 'Seugnda fila con texto']})
+#tokenizado = tokenization_trans.transform(dataframeExample['Review'])
+#preprocesado = preprocessing_trans.transform(tokenizado)
+#lematizado = stem_and_lemm_trans.transform(preprocesado)
+#junto = join_trans.transform(lematizado)
+#tfidf_vectorizer = TfidfVectorizer()
+#tfidf_vectorizer.fit_transform(junto)
+#print(junto)
+
+#dataframeExample = pd.DataFrame({'Review': ['Hola, como estas? Estoy bien, gracias.', 'Seugnda fila con texto', 'mal horrible olor feo caro', 'que esta pasando aca horrible']})
+#print(dataframeExample)
+#model = load("modelo.joblib") ##Model.joblib fallando, estamos haciendo mal el pipeline.
+#resultado = model.predict(dataframeExample["Review"])
+#print(resultado)

@@ -18,10 +18,11 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 @app.post("/predict")
 def make_predictions(dataModel: DataModel):
-    print(dataModel.dict())
-    df = pd.DataFrame(dataModel.dict(), columns=dataModel.dict().keys(), index=[0])
-    df.columns = dataModel.columns()
-    model = load("modelo.joblib") ##Model.joblib fallando, estamos haciendo mal el pipeline.
-    result = model.predict(df)
-    return result ## Falta ver si este return es diferente por ser un resultado numerico aca o en predictionModel
+    df = pd.DataFrame(dataModel.Review, columns=dataModel.columns())
+    print(df)
+    model = load("assets/modelo.joblib") 
+    print(model)
+    df["Class"] = model.predict(df["Review"])
+    print(df)
+    return df.to_dict()
 
