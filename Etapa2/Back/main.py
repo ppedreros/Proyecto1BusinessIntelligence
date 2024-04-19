@@ -5,22 +5,22 @@ from fastapi import FastAPI, File, UploadFile
 from joblib import load
 from dataModel import DataModel
 import preprocessing as pp
+from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Configurar los orígenes permitidos
 origins = [
     "http://localhost",
-    "http://localhost:3000",  # Aquí debes incluir la URL de tu aplicación React
+    "http://localhost:3000",  
 ]
 
-# Configurar middleware CORS
+# Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -33,27 +33,29 @@ def read_root():
 def read_item(item_id: int, q: Optional[str] = None):
    return {"item_id": item_id, "q": q}
 
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...)):
-    contents = await file.read()
-    # Aquí puedes procesar los contenidos del archivo CSV (contents)
-    # Por ejemplo, puedes guardarlos en una base de datos o procesarlos de alguna manera.
-    return {"filename": file.filename}
 
-# Define el endpoint para recibir el archivo CSV y realizar predicciones
-@app.post("/predict")
+@app.post("/predictCSV")
 async def make_predictions(file: UploadFile = File(...)):
-   # Lee el contenido del archivo CSV y crea un DataFrame
    contents = await file.read()
-   # Crea un objeto BytesIO a partir de los bytes
    bytes_io = BytesIO(contents)
-
-   # Lee el contenido del archivo CSV y crea un DataFrame
    df = pd.read_csv(bytes_io)
    model = load("assets/modelo.joblib") 
-   # Realiza las predicciones con el modelo cargado
    df["Class"] = model.predict(df["Review"])
-
-   # Devuelve los resultados como un diccionario
    return df.to_dict()
+
+
+class PredictionRequest(BaseModel):
+    text: str
+
+class PredictionResponse(BaseModel):
+    predictions: dict
+
+@app.post("/predictText", response_model=PredictionResponse)
+async def make_predictionsText(request: PredictionRequest):
+    df = pd.DataFrame({'Review': [request.text]})
+    model = load("assets/modelo.joblib")
+    prediction = model.predict(df["Review"])[0]  
+    prediction = int(prediction)
+    return {"predictions": {"Review": request.text, "Class": prediction}}
+
 
