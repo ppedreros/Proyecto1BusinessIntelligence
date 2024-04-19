@@ -1,5 +1,23 @@
-1. Hay que instalar uvicorn, fastapi y las demas imports de los archivos por pip.
+1. Hay que instalar uvicorn, fastapi, nodejs,  y las demas imports de los archivos por pip. (dejo una aclaracion abajo con los pip install que tengo por si acaso)
 
-2. para correr usar f5 y darle a fastapi o por comando con uvicorn main:app
+2. Para correr el back usar f5 y darle a fastapi o por comando con uvicorn main:app.
 
-3. ir a la url http://127.0.0.1:8000/docs# y darle a predictions y try out para intentar hacer la prediccion, en este momento da error.
+3. Ir a la url http://127.0.0.1:8000/docs# y usar los predictionCSV o predictionText.
+
+4. Para correr el front hay que estar en la carpeta front y usar el comando npm start.
+
+Funciona con:
+
+fastapi          0.110.2
+ftfy             6.2.0
+gurobipy         11.0.0
+matplotlib       3.8.1
+networkx         3.2.1
+nltk             3.8.1
+npm              0.1.1
+npx              0.1.2
+pandas           2.2.2
+pip              23.2.1
+python-multipart 0.0.9
+scikit-learn     1.4.2
+uvicorn          0.29.0
