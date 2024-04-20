@@ -56,6 +56,7 @@ async def make_predictionsText(request: PredictionRequest):
     model = load("assets/modelo.joblib")
     prediction = model.predict(df["Review"])[0]  
     prediction = int(prediction)
+
     return {"predictions": {"Review": request.text, "Class": prediction}}
 
 

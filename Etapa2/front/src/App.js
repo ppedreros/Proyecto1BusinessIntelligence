@@ -60,6 +60,7 @@ function App() {
         {predictions && (
           <div>
             <h2>Resultados de las Predicciones:</h2>
+            <h4>El modelo hace una predicción con una precisión de 60%</h4>
             <div className="table-container">
               <table>
                 <thead>

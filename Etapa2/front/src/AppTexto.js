@@ -52,6 +52,7 @@ function AppTexto() {
         {predictions && (
           <div>
             <h2>Resultado de la Predicción:</h2>
+            <h4>El modelo hace una predicción con una precisión de 6  0%</h4>
             <div className="prediction-container">
               <p>Review: {predictions.Review}</p>
               <p>Clase: {predictions.Class}</p>
